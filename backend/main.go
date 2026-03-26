@@ -2,7 +2,10 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +13,9 @@ import (
 	"github.com/kerke/cronjob-panel/db"
 	"github.com/kerke/cronjob-panel/router"
 )
+
+//go:embed static/*
+var staticFS embed.FS
 
 func main() {
 	database, err := db.InitDB("data/cronjob-panel.db")
@@ -26,6 +32,10 @@ func main() {
 
 	r := gin.Default()
 	router.Setup(r, database, discordCfg)
+
+	// Serve frontend static files
+	frontendFS, _ := fs.Sub(staticFS, "static")
+	r.NoRoute(gin.WrapH(http.FileServer(http.FS(frontendFS))))
 
 	port := os.Getenv("PORT")
 	if port == "" {
