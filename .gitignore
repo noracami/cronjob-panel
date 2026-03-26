@@ -1,0 +1,6 @@
+.env
+backend/cronjob-panel
+backend/data/
+frontend/.nuxt/
+frontend/.output/
+frontend/node_modules/

@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/kerke/cronjob-panel/auth"
 	"github.com/kerke/cronjob-panel/db"
 	"github.com/kerke/cronjob-panel/router"
@@ -18,6 +19,8 @@ import (
 var staticFS embed.FS
 
 func main() {
+	godotenv.Load() // .env is optional, ignore error if missing
+
 	database, err := db.InitDB("data/cronjob-panel.db")
 	if err != nil {
 		log.Fatal(err)
