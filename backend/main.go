@@ -19,7 +19,7 @@ import (
 var staticFS embed.FS
 
 func main() {
-	godotenv.Load() // .env is optional, ignore error if missing
+	godotenv.Load("../.env", ".env") // try project root and current dir
 
 	database, err := db.InitDB("data/cronjob-panel.db")
 	if err != nil {
@@ -31,6 +31,7 @@ func main() {
 		ClientID:     os.Getenv("DISCORD_CLIENT_ID"),
 		ClientSecret: os.Getenv("DISCORD_CLIENT_SECRET"),
 		RedirectURI:  os.Getenv("DISCORD_REDIRECT_URI"),
+		FrontendURL:  os.Getenv("FRONTEND_URL"),
 	}
 
 	r := gin.Default()

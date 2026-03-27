@@ -26,6 +26,7 @@ type DiscordConfig struct {
 	ClientID     string
 	ClientSecret string
 	RedirectURI  string
+	FrontendURL  string // where to redirect after login (e.g. http://localhost:3000)
 	TokenURL     string // override for testing; defaults to Discord token endpoint
 	UserURL      string // override for testing; defaults to Discord user endpoint
 }
@@ -94,7 +95,11 @@ func DiscordCallbackHandler(cfg DiscordConfig, db *sql.DB) gin.HandlerFunc {
 		}
 
 		c.SetCookie("session", sessionID, int((7 * 24 * time.Hour).Seconds()), "/", "", false, true)
-		c.Redirect(http.StatusFound, "/")
+		redirectTo := "/"
+		if cfg.FrontendURL != "" {
+			redirectTo = cfg.FrontendURL
+		}
+		c.Redirect(http.StatusFound, redirectTo)
 	}
 }
 

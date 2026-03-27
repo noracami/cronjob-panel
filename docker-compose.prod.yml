@@ -1,0 +1,12 @@
+services:
+  cronjob-panel:
+    image: asia-east1-docker.pkg.dev/careful-broker-485510-r0/cronjob-panel/cronjob-panel:latest
+    ports:
+      - "8081:8080"
+    env_file: .env
+    volumes:
+      - data:/app/data
+    restart: unless-stopped
+
+volumes:
+  data:
